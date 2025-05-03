@@ -1,7 +1,12 @@
-use rusqlite::{Connection, Result, Statement};
+use rusqlite::{Connection, Statement};
 use crate::task::{Task, TaskType};
 use utc_dt::{UTCDatetime};
 use utc_dt::time::{UTCTransformations, UTCTimestamp};
+
+pub enum DatabaseTables {
+    tasks,
+    completed,
+}
 
 pub fn db_start() -> (Vec<Task>, Vec<Task>) {
     let conn = handle_db_load();
@@ -9,6 +14,26 @@ pub fn db_start() -> (Vec<Task>, Vec<Task>) {
 
     let _ = conn.close();
     (tasks, completed)
+}
+
+pub fn add_task_to_db(task: Task, table: DatabaseTables) {
+    let conn = handle_db_load();
+    //match table {
+    //    tasks => { },
+    //    completed => { },
+    //}
+    
+    let _ = conn.close();
+}
+
+pub fn remove_task_from_db(task: Task, table: DatabaseTables) {
+    let conn = handle_db_load();
+    //match table {
+    //    tasks => { },
+    //    completed => { },
+    //}
+
+    let _ = conn.close();
 }
 
 fn handle_db_load() -> Connection {
@@ -22,7 +47,7 @@ fn handle_db_load() -> Connection {
             description text,
             task_type text,
             completed bool not null,
-            id integer not null unique
+            id integer not null unique primary key
         )",
     [],
     ).expect("[Error] db.rs, handle_db_load(): Unable to find or create SQL table 'tasks'");
@@ -35,7 +60,7 @@ fn handle_db_load() -> Connection {
             description text,
             task_type text,
             completed bool not null,
-            id integer not null unique
+            id integer not null unique primary key
         )",
     [],
     ).expect("[Error] db.rs, handle_db_load(): Unable to find or create SQL table 'completed'"); 
@@ -61,6 +86,8 @@ fn extract_db(conn: &Connection) -> (Vec<Task>, Vec<Task>) {
 fn convert_table_to_tasks(stmt: &mut Statement) -> Vec<Task> {
     let mut vec = Vec::<Task>::new();
     for row_result in stmt.query_map([], |row| {
+            //Make sure cd and td are stored as u64 integers which represent seconds in a
+            //timestamp
             let raw_cd = row.get::<_, u64>(1).expect("[Error] db.rs, convert_table_to_tasks(stmt: &Statement) -> Vec<Task>: creation_date"); 
             let cd_timestamp = UTCTimestamp::from_secs(raw_cd);
             let _creation_date: UTCDatetime = UTCDatetime::from_timestamp(cd_timestamp);
@@ -110,4 +137,13 @@ fn get_task_type(task_type_str: &str) -> Vec<TaskType> {
     }
 
     vec
+}
+
+
+
+
+//Begin Testing Section
+#[cfg(test)]
+mod tests {
+    use super::*;
 }
