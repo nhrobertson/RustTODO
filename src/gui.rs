@@ -48,12 +48,12 @@ fn start_window(event_loop: &ActiveEventLoop) -> Option<Window> {
     window
 }
 
-pub fn start_gui() {
+pub fn run_gui() {
     let event_loop = EventLoop::new().unwrap();
     event_loop.set_control_flow(ControlFlow::Wait);
 
     let mut app = App::default();
-
+    
     event_loop.run_app(&mut app);
 
 }
