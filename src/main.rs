@@ -21,8 +21,8 @@ fn main() {
     }
 }
 
-fn option_cli(tasks: Vec<Task>, completed: Vec<Task>) {
-    let _ = run_cli(tasks, completed);
+fn option_cli(mut tasks: Vec<Task>, mut completed: Vec<Task>) {
+    let _ = run_cli(&mut tasks, &mut completed);
 }
 
 fn option_gui(tasks: Vec<Task>, completed: Vec<Task>) {

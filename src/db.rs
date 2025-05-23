@@ -73,12 +73,12 @@ fn extract_db(conn: &Connection) -> (Vec<Task>, Vec<Task>) {
     //Prepare the connection to the "tasks" table
     let mut stmt = conn.prepare("SELECT name, creation_date, target_date, description, task_type, completed, id FROM tasks").unwrap();
 
-    let tasks = convert_table_to_tasks(&mut stmt);
+    let mut tasks = convert_table_to_tasks(&mut stmt);
     
     //Prepare the connection to the "completed" table
     stmt = conn.prepare("SELECT name, creation_date, target_date, description, task_type, completed, id FROM completed").unwrap();
 
-    let completed = convert_table_to_tasks(&mut stmt);
+    let mut completed = convert_table_to_tasks(&mut stmt);
     
     (tasks, completed)
 }

@@ -3,7 +3,7 @@ use utc_dt::UTCDatetime;
 
 pub struct Task {
 	pub name: String,
-        pub creation_date: UTCDatetime,
+  pub creation_date: UTCDatetime,
 	pub target_date: Option<UTCDatetime>,
 	pub description: String,
 	pub task_type: Vec<TaskType>,
